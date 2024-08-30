@@ -1,0 +1,35 @@
+CREATE DATABASE swms CHARACTER SET "utf8mb4";
+USE swms;
+CREATE TABLE locations (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	lat DECIMAL(9, 6) NOT NULL,
+    lng DECIMAL(9, 6) NOT NULL,
+    address VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE trashBins (
+	id VARCHAR(16) NOT NULL PRIMARY KEY,
+    locationId INT NOT NULL,
+    FOREIGN KEY (locationId) REFERENCES locations(id)
+);
+
+CREATE TABLE updates (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    trashBinId VARCHAR(16) NOT NULL,
+    fillLevel TINYINT NOT NULL,
+    dateAndTime TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (trashBinId) REFERENCES trashBins(id)
+);
+
+CREATE TABLE pickups (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    dateAndTime TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE trashBinsInPickups (
+	pickupId INT NOT NULL,
+	trashBinId VARCHAR(16) NOT NULL,
+    PRIMARY KEY (pickUpId, trashBinId),
+    FOREIGN KEY (pickupId) REFERENCES pickups(id),
+    FOREIGN KEY (trashBinId) REFERENCES trashBins(id)
+);
